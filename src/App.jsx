@@ -22,10 +22,30 @@ function App() {
           { params }
         );
 
-        setMovies(res.data.results);
-        console.log(movies);
+        const moviesData = res.data.results;
+
+        const moviesWithCredits = await Promise.all(
+          moviesData.map(async (movie) => {
+            const creditsParams = {
+              api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
+            };
+            const creditsRes = await axios.get(
+              `https://api.themoviedb.org/3/movie/${movie.id}/credits`,
+              { params: creditsParams }
+            );
+            const credits = creditsRes.data.cast;
+
+            return {
+              ...movie,
+              credits: credits,
+            };
+          })
+        );
+
+        setMovies(moviesWithCredits);
+        console.log(moviesWithCredits);
       } catch (error) {
-        console.error("Error fetching movies:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -43,6 +63,7 @@ function App() {
       setPage(page - 1);
     }
   };
+
   return (
     <>
       <div className="container">
@@ -55,10 +76,10 @@ function App() {
             next
           </button>
         </div>
-        <div>
-          {/*  { movies.map
-        
-        <Card/>} */}
+        <div className="my-4 row justify-content start g-4">
+          {movies.map((movie, index) => (
+            <Card key={index} movie={movie} />
+          ))}
         </div>
       </div>
     </>

@@ -3,3 +3,21 @@ header {
   width: 100%;
   background-color: grey;
 }
+
+.ms_card {
+  height: 300px !important;
+}
+
+.ms_credits {
+  display: none;
+  color: transparent;
+  transition: color .8s, background-color .8s;
+  width: 100%;
+  height: 100%;
+}
+
+.ms_card:hover .ms_credits {
+  color: white;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.886);
+}
