@@ -40,13 +40,13 @@ function Header() {
             >
               {/* Utilizza Link per navigare */}
               <li>
-                <Link to="/">Home</Link>
+                <Link className="ms_link" to="/">Home</Link>
               </li>
               <li>
-                <Link to="/movies">Movies</Link>
+                <Link  className="ms_link" to="/movies">Movies</Link>
               </li>
               <li>
-                <Link to="/tv-series">TV series</Link>
+                <Link  className="ms_link" to="/tv-series">TV series</Link>
               </li>
             </ul>
           </nav>
