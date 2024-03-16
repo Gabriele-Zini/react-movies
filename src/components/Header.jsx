@@ -1,10 +1,10 @@
 import SvgComponent from "../components/Logo";
 import video from "../assets/video/6012602_Vfx Hologram Immersive Virtual Reality_By_Frame_Stock_Footage_Artlist_HD.mp4";
 import LogoMobile from "./LogoMobile";
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { Link } from "react-router-dom"; // Importa solo Link se stai usando solo il componente Link
+import { useState } from "react";
 
-function App() {
+function Header() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleNavbar = () => {
@@ -20,7 +20,6 @@ function App() {
           backgroundPosition: "center",
         }}
       >
-        {" "}
         <video
           autoPlay
           loop
@@ -34,14 +33,21 @@ function App() {
         </div>
         <div>
           <nav>
-            
             <ul
               className={`list-unstyled fw-bold ms_navlink d-flex gap-2 ${
                 isOpen ? "show" : ""
               }`}
             >
-              <li>Movies</li>
-              <li>TV series</li>
+              {/* Utilizza Link per navigare */}
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/movies">Movies</Link>
+              </li>
+              <li>
+                <Link to="/tv-series">TV series</Link>
+              </li>
             </ul>
           </nav>
         </div>
@@ -50,4 +56,4 @@ function App() {
   );
 }
 
-export default App;
+export default Header;

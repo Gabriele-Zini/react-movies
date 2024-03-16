@@ -5,7 +5,7 @@ function Card({ movie }) {
  
   return (
     <>
-      <div className="col-12 col-md-8 col-lg-4 col-xxl-2 ms-3">
+      <div className="col-12 col-md-3 col-lg-2 ms-3 mx-auto">
         <div
           className=" ms_card mx-auto"
           style={{
