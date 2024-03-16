@@ -10,7 +10,7 @@ function Movies() {
   const [loading, setLoading] = useState(false);
   const endOfListRef = useRef();
   const [inputValue, setInputValue] = useState("");
-  const [loadingMore, setLoadingMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,9 +60,6 @@ function Movies() {
       /*  console.log(inputValue);*/
       console.log(moviesWithCredits);
       console.log("Loading more:", loadingMore);
-      if (moviesWithCredits.length === 0) {
-        setLoadingMore(false);
-      }
     };
 
     fetchData();
@@ -72,7 +69,7 @@ function Movies() {
     const target = entries[0];
 
     if (target.isIntersecting && !loading && !loadingMore) {
-      setLoadingMore(true);
+      setLoadingMore(false);
       setPage((prevPage) => prevPage + 1);
     }
   };
@@ -83,19 +80,18 @@ function Movies() {
       rootMargin: "0px",
       threshold: 0.1,
     });
-
-    if (loadingMore) {
-      if (endOfListRef.current) {
-        observer.observe(endOfListRef.current);
-      }
-
-      return () => {
-        if (endOfListRef.current) {
-          observer.unobserve(endOfListRef.current);
-        }
-      };
+  
+    if (endOfListRef.current && !loadingMore) {
+      observer.observe(endOfListRef.current);
     }
-  }, [endOfListRef, loading, movies]);
+  
+    return () => {
+      if (endOfListRef.current) {
+        observer.unobserve(endOfListRef.current);
+      }
+    };
+  }, [endOfListRef, loadingMore]);
+  
 
   const scrollToTop = () => {
     window.scrollTo({
