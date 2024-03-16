@@ -1,7 +1,13 @@
-import "./App.css";
-import { useEffect, useState } from "react";
-import Card from "./components/Card";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { Carousel } from "react-bootstrap";
+import Card from "./components/Card";
+import "./App.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faChevronLeft,
+  faChevronRight,
+} from "@fortawesome/free-solid-svg-icons";
 
 function App() {
   const [movies, setMovies] = useState([]);
@@ -43,7 +49,6 @@ function App() {
         );
 
         setMovies(moviesWithCredits);
-        console.log(moviesWithCredits);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -54,33 +59,55 @@ function App() {
     fetchData();
   }, [page]);
 
-  const nextPage = () => {
-    setPage(page + 1);
+  const chunkArray = (arr, size) => {
+    const chunkedArr = [];
+    for (let i = 0; i < arr.length - size + 1; i ++) {
+      chunkedArr.unshift(arr.slice(i, i + size));
+    }
+    console.log(chunkedArr)
+    return chunkedArr;
   };
 
-  const prevPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
-    }
-  };
+  const movieChunks = chunkArray(movies, 7);
 
   return (
     <>
-      <div className="container">
-        <div className="d-flex gap-3 mt-4">
-          <button className="btn btn-primary" onClick={prevPage}>
-            prev
-          </button>
-          <p>{page}</p>
-          <button className="btn btn-primary" onClick={nextPage}>
-            next
-          </button>
-        </div>
-        <div className="my-4 row justify-content start g-4">
-          {movies.map((movie, index) => (
-            <Card key={index} movie={movie} />
+      <div className=" mb-5">
+        <h3 className="text-center text-white mb-4">Movies</h3>
+        <Carousel
+          indicators={false}
+          controls={true}
+          interval={null}
+          pause={false}
+          slide={true}
+          fade={true}
+          pauseOnHover={false}
+          keyboard={false}
+          touch={true}
+          prevIcon={
+            <span className="arrow-button">
+              <FontAwesomeIcon icon={faChevronLeft} />
+            </span>
+          }
+          nextIcon={
+            <span className="arrow-button">
+              <FontAwesomeIcon icon={faChevronRight} />
+            </span>
+          }
+          className="netflix-carousel"
+        >
+          {movieChunks.map((movieChunk, index) => (
+            <Carousel.Item key={index}>
+              <div className="d-flex justify-content-center flex-row gap-3">
+                {movieChunk.map((movie, index) => (
+                  <div key={index} className="flex-grow-0">
+                    <Card movie={movie} />
+                  </div>
+                ))}
+              </div>
+            </Carousel.Item>
           ))}
-        </div>
+        </Carousel>
       </div>
     </>
   );

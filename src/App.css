@@ -1,19 +1,40 @@
-header {
-  min-height: 100px;
-  width: 100%;
-  background-color: grey;
-}
-
+  /* utilities */
 .ms_card {
   height: 300px !important;
+  width: 200px !important;
+  border-radius: 8px;
+  font-size: .8rem;
 }
 
+/* arrow button */
+.arrow-button {
+  background-color: rgba(0, 0, 0, 0.227);
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  font-size: 2rem;
+  transition: background-color 1s;
+}
+
+.arrow-button:hover{
+  background-color: black;
+  color: white;
+}
+
+
+.ms_logo {
+  width: 30px !important;
+  height: 35px !important;
+  position: absolute !important;
+  top: 10px;
+  left: 10px;
+}
 .ms_credits {
   display: none;
   color: transparent;
   transition: color .8s, background-color .8s;
-  width: 100%;
   height: 100%;
+  width: 100%;
 }
 
 .ms_card:hover .ms_credits {
@@ -21,3 +42,29 @@ header {
   z-index: 999;
   background-color: rgba(0, 0, 0, 0.886);
 }
+
+.ms_video {
+  object-fit: cover;
+  max-height: 600px;
+  object-position: top;
+}
+
+
+/* HEADER */
+header {
+position: relative;
+}
+
+.ms_navlink {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 1px rgb(255, 255, 255);
+}
+
+.ms_navlink >li:hover {
+color: red;
+cursor: pointer;
+}
+
