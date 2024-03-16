@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Card from "../components/Card";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 function Movies() {
   const [movies, setMovies] = useState([]);
@@ -57,7 +59,7 @@ function Movies() {
     const observer = new IntersectionObserver(handleIntersection, {
       root: null,
       rootMargin: "0px",
-      threshold: 0.1,
+      threshold: 0.5,
     });
     if (endOfListRef.current) {
       observer.observe(endOfListRef.current);
@@ -70,10 +72,24 @@ function Movies() {
     };
   }, [endOfListRef, loading]);
 
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <div className="container my-5">
-        <h3 className="text-center text-white mb-5">Movies</h3>
+        <h3 className="text-center text-white mb-5 ms_margin-top">Movies</h3>
         <div className="row justify-content-center align-items-center gy-5 mx-auto">
           {movies.map((movie, index) => (
             <Card key={index} movie={movie} />
@@ -90,6 +106,18 @@ function Movies() {
             </div>
           )}
         </div>
+        <FontAwesomeIcon
+          href="#"
+          icon={faChevronUp}
+          className="ms_chevron-up"
+          onClick={scrollToTop}
+        />
+        <FontAwesomeIcon
+          href="#"
+          icon={faChevronDown}
+          className="ms_chevron-down"
+          onClick={scrollToBottom}
+        />
       </div>
     </>
   );

@@ -21,6 +21,36 @@
   color: white !important;
 }
 
+.ms_chevron-up {
+  position: fixed;
+  bottom: 50px;
+  left: 50%;
+  z-index: 999;
+  color: lightgray;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.495);
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer
+}
+
+.ms_chevron-down {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  z-index: 999;
+  color: lightgray;
+  font-size: 1rem;
+  background-color: rgba(0, 0, 0, 0.495);
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer
+}
+
+.ms_margin-top {
+  margin-top: 100px;
+}
+
 /* arrow button */
 .arrow-button {
   background-color: rgba(0, 0, 0, 0.227);
