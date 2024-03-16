@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Card from "./components/Card";
+import SeriesCard from "./components/SeriesCard";
 import "./App.css";
 /* import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -13,6 +14,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [series, setSeries] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -61,12 +63,17 @@ function App() {
           page: page,
         };
         const res = await axios.get(
-          `https://api.themoviedb.org/3/discover/movie?`,
+          `https://api.themoviedb.org/3/discover/movie?&sort_by=vote_average.desc&vote_count.gte=200`,
           { params }
         );
 
-        const moviesData = res.data.results;
+        const resp= await axios.get(`https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=vote_average.desc&vote_count.gte=200`, {params})
 
+        const moviesData = res.data.results;
+        const seriesData =resp.data.results;
+       
+
+        // MOVIES CREDITS
         const moviesWithCredits = await Promise.all(
           moviesData.map(async (movie) => {
             const creditsParams = {
@@ -85,7 +92,27 @@ function App() {
           })
         );
 
+        // SERIES CREDITS
+        const seriesWithCredits = await Promise.all(
+          seriesData.map(async (serie) => {
+            const creditsParams = {
+              api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
+            };
+            const creditsRes = await axios.get(
+              `https://api.themoviedb.org/3/tv/${serie.id}/credits`,
+              { params: creditsParams }
+            );
+            const credits = creditsRes.data.cast;
+
+            return {
+              ...serie,
+              credits: credits,
+            };
+          })
+        );
+        setSeries(seriesWithCredits)
         setMovies(moviesWithCredits);
+        console.log(seriesWithCredits)
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -99,11 +126,19 @@ function App() {
   return (
     <>
       <div className="my-5 ms_container">
-        <h3 className="text-center text-white mb-4">Movies</h3>
+        <h3 className="text-center text-white mt-5 mb-4">Movies</h3>
         <Slider {...settings}>
           {movies.map((movie, index) => (
             <div key={index}>
               <Card movie={movie} />
+            </div>
+          ))}
+        </Slider>
+        <h3 className="text-center text-white mt-5 mb-4">Series</h3>
+        <Slider {...settings}>
+          {series.map((serie, index) => (
+            <div key={index}>
+              <SeriesCard serie={serie} />
             </div>
           ))}
         </Slider>
