@@ -57,7 +57,7 @@ function Movies() {
     const observer = new IntersectionObserver(handleIntersection, {
       root: null,
       rootMargin: "0px",
-      threshold: 0.1, 
+      threshold: 0.1,
     });
     if (endOfListRef.current) {
       observer.observe(endOfListRef.current);
@@ -74,7 +74,7 @@ function Movies() {
     <>
       <div className="container my-5">
         <h3 className="text-center text-white mb-5">Movies</h3>
-        <div className="row justify-content-start align-items-center gy-5 mx-auto">
+        <div className="row justify-content-center align-items-center gy-5 mx-auto">
           {movies.map((movie, index) => (
             <Card key={index} movie={movie} />
           ))}
@@ -84,7 +84,11 @@ function Movies() {
           className="d-flex justify-content-center"
           style={{ minHeight: "100px" }}
         >
-          {loading && <p>Loading...</p>}
+          {loading && (
+            <div className="spinner-border text-white my-5" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -1,24 +1,25 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import SeriesCard from "../components/SeriesCard";
 
-function Movies() {
+function Series() {
   const [series, setSeries] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const endOfListRef = useRef();
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       const params = {
         api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
         page: page,
       };
-      const res = await axios.get(
-        `https://api.themoviedb.org/3/discover/tv?`,
-        { params }
-      );
+      const res = await axios.get(`https://api.themoviedb.org/3/discover/tv?`, {
+        params,
+      });
 
-      // SERIES CREDITS
-      const seriesData =res.data.results;
+      const seriesData = res.data.results;
       const seriesWithCredits = await Promise.all(
         seriesData.map(async (serie) => {
           const creditsParams = {
@@ -37,45 +38,58 @@ function Movies() {
         })
       );
 
-      setSeries(seriesWithCredits);
-      console.log(seriesData);
+      setSeries((prevSeries) => [...prevSeries, ...seriesWithCredits]);
+      setLoading(false);
     };
 
     fetchData();
   }, [page]);
-  const nextPage = () => {
-    setPage(page + 1);
-  };
 
-  const prevPage = () => {
-    if (page > 1) {
-      setPage(page - 1);
+  const handleIntersection = (entries) => {
+    const target = entries[0];
+    if (target.isIntersecting && !loading) {
+      setPage((prevPage) => prevPage + 1);
     }
   };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      threshold: 0.1, // Modifica la soglia per scatenare l'intersezione
+    });
+    if (endOfListRef.current) {
+      observer.observe(endOfListRef.current);
+    }
+
+    return () => {
+      if (endOfListRef.current) {
+        observer.unobserve(endOfListRef.current);
+      }
+    };
+  }, [endOfListRef, loading]);
 
   return (
     <>
       <div className="container my-5">
-        <h3 className="text-center text-white mb-5">Tv Series</h3>
-        <div className="row justify-content-start align-items-center gy-5 mx-auto">
+        <h3 className="text-center text-white mb-5">TV Series</h3>
+        <div className="row justify-content-center align-items-center gy-5 mx-auto">
           {series.map((serie, index) => (
             <SeriesCard key={index} serie={serie} />
           ))}
         </div>
-        <div className="d-flex justify-content-center">
-          <div className="d-flex gap-3 mt-4 align-items-center">
-            <button className="btn ms_pagination-color" onClick={prevPage}>
-              prev
-            </button>
-            <p className="text-white m-0">{page}</p>
-            <button className="btn ms_pagination-color" onClick={nextPage}>
-              next
-            </button>
-          </div>
+        <div
+          ref={endOfListRef}
+          className="d-flex justify-content-center"
+          style={{ minHeight: "100px" }}
+        >
+          {loading && (
+            <div className="spinner-border text-white my-5" role="status">
+              <span className="visually-hidden">Loading...</span>
+            </div>
+          )}
         </div>
       </div>
     </>
   );
 }
 
-export default Movies;
+export default Series;
