@@ -1,19 +1,52 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { Carousel } from "react-bootstrap";
 import Card from "./components/Card";
 import "./App.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+/* import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faChevronLeft,
   faChevronRight,
-} from "@fortawesome/free-solid-svg-icons";
+} from "@fortawesome/free-solid-svg-icons"; */
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
+  const settings = {
+    slidesToShow: 6,
+    infinite: false,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 1124,
+        settings: {
+          slidesToShow: 4,
+        },
+      },
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+        },
+      },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+      {
+        breakpoint: 500,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,55 +92,17 @@ function App() {
     fetchData();
   }, [page]);
 
-  const chunkArray = (arr, size) => {
-    const chunkedArr = [];
-    for (let i = 0; i < arr.length - size + 1; i ++) {
-      chunkedArr.unshift(arr.slice(i, i + size));
-    }
-    console.log(chunkedArr)
-    return chunkedArr;
-  };
-
-  const movieChunks = chunkArray(movies, 7);
-
   return (
     <>
-      <div className=" mb-5">
+      <div className="my-5 ms_container">
         <h3 className="text-center text-white mb-4">Movies</h3>
-        <Carousel
-          indicators={false}
-          controls={true}
-          interval={null}
-          pause={false}
-          slide={true}
-          fade={true}
-          pauseOnHover={false}
-          keyboard={false}
-          touch={true}
-          prevIcon={
-            <span className="arrow-button">
-              <FontAwesomeIcon icon={faChevronLeft} />
-            </span>
-          }
-          nextIcon={
-            <span className="arrow-button">
-              <FontAwesomeIcon icon={faChevronRight} />
-            </span>
-          }
-          className="netflix-carousel"
-        >
-          {movieChunks.map((movieChunk, index) => (
-            <Carousel.Item key={index}>
-              <div className="d-flex justify-content-center flex-row gap-3">
-                {movieChunk.map((movie, index) => (
-                  <div key={index} className="flex-grow-0">
-                    <Card movie={movie} />
-                  </div>
-                ))}
-              </div>
-            </Carousel.Item>
+        <Slider {...settings}>
+          {movies.map((movie, index) => (
+            <div key={index}>
+              <Card movie={movie} />
+            </div>
           ))}
-        </Carousel>
+        </Slider>
       </div>
     </>
   );

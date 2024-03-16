@@ -34,9 +34,7 @@ function App() {
         </div>
         <div>
           <nav>
-            <button className="navbar-toggler" onClick={toggleNavbar}>
-              <span className="navbar-toggler-icon">&#9776;</span>
-            </button>
+            
             <ul
               className={`list-unstyled fw-bold ms_navlink d-flex gap-2 ${
                 isOpen ? "show" : ""

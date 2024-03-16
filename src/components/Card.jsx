@@ -5,15 +5,14 @@ function Card({ movie }) {
  
   return (
     <>
-      <div className="col-12 col-md-6 col-lg-4 col-xxl-2">
+      <div className="col-12 col-md-8 col-lg-4 col-xxl-2 mx-auto">
         <div
           className=" ms_card mx-auto"
           style={{
             backgroundImage: `url(https://image.tmdb.org/t/p/w342/${movie.poster_path})`,
             backgroundSize: "contain",
             backgroundRepeat: "no-repeat",
-            width:'100%',
-            height:'100%'
+            maxWidth:'200px',
           }}
         >
           <div className="ms_credits d-flex flex-column align-items-start justify-content-center p-2">

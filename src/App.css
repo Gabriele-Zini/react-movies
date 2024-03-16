@@ -6,6 +6,16 @@
   font-size: .8rem;
 }
 
+@media (max-width: 500px) {
+  .ms_card {
+    height: 300px !important;
+    width: 320px !important;
+  }
+  .ms_container {
+    width: 80%;
+  }
+}
+
 /* arrow button */
 .arrow-button {
   background-color: rgba(0, 0, 0, 0.227);
@@ -49,6 +59,12 @@
   object-position: top;
 }
 
+.ms_container {
+  width: 90%;
+  max-width: 1450px;
+  margin: 0 auto;
+
+}
 
 /* HEADER */
 header {
