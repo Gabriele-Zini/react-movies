@@ -82,11 +82,11 @@ function Series() {
       behavior: "smooth",
     });
   };
-  
+
   return (
     <>
       <div className="container my-5">
-        <h3 className="text-center text-white mb-5 ms_margin-top">TV Series</h3>
+        <h3 className="text-center text-white mb-4 ms_margin-top">TV Series</h3>
         <div className="row justify-content-center align-items-center gy-5 mx-auto">
           {series.map((serie, index) => (
             <SeriesCard key={index} serie={serie} />

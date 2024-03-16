@@ -9,18 +9,26 @@ function Movies() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const endOfListRef = useRef();
+  const [inputValue, setInputValue] = useState("");
+  const [loadingMore, setLoadingMore] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      let apiUrl;
+      if (inputValue !== "") {
+        apiUrl = "https://api.themoviedb.org/3/search/movie?";
+      } else {
+        apiUrl = "https://api.themoviedb.org/3/discover/movie";
+      }
       const params = {
         api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
         page: page,
+        query: inputValue,
       };
-      const res = await axios.get(
-        `https://api.themoviedb.org/3/discover/movie?`,
-        { params }
-      );
+      const res = await axios.get(apiUrl, {
+        params,
+      });
 
       const moviesData = res.data.results;
       const moviesWithCredits = await Promise.all(
@@ -41,16 +49,30 @@ function Movies() {
         })
       );
 
-      setMovies((prevMovies) => [...prevMovies, ...moviesWithCredits]);
+      if (page === 1) {
+        setMovies(moviesWithCredits);
+      } else {
+        setMovies((prevMovies) => [...prevMovies, ...moviesWithCredits]);
+      }
+
       setLoading(false);
+      setLoadingMore(false);
+      /*  console.log(inputValue);*/
+      console.log(moviesWithCredits);
+      console.log("Loading more:", loadingMore);
+      if (moviesWithCredits.length === 0) {
+        setLoadingMore(false);
+      }
     };
 
     fetchData();
-  }, [page]);
+  }, [page, inputValue]);
 
   const handleIntersection = (entries) => {
     const target = entries[0];
-    if (target.isIntersecting && !loading) {
+
+    if (target.isIntersecting && !loading && !loadingMore) {
+      setLoadingMore(true);
       setPage((prevPage) => prevPage + 1);
     }
   };
@@ -59,18 +81,21 @@ function Movies() {
     const observer = new IntersectionObserver(handleIntersection, {
       root: null,
       rootMargin: "0px",
-      threshold: 0.5,
+      threshold: 0.1,
     });
-    if (endOfListRef.current) {
-      observer.observe(endOfListRef.current);
-    }
 
-    return () => {
+    if (loadingMore) {
       if (endOfListRef.current) {
-        observer.unobserve(endOfListRef.current);
+        observer.observe(endOfListRef.current);
       }
-    };
-  }, [endOfListRef, loading]);
+
+      return () => {
+        if (endOfListRef.current) {
+          observer.unobserve(endOfListRef.current);
+        }
+      };
+    }
+  }, [endOfListRef, loading, movies]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -89,7 +114,22 @@ function Movies() {
   return (
     <>
       <div className="container my-5">
-        <h3 className="text-center text-white mb-5 ms_margin-top">Movies</h3>
+        <div className="ms_margin-top mb-4 d-flex justify-content-between align-items-center gap-3 mx-auto col-12 col-md-6 col-lg-4 flex-column flex-md-row">
+          <h3 className="text-center text-white">Movies</h3>
+          <input
+            className="form-control w-75"
+            type="text"
+            placeholder="search movies"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                setInputValue(e.target.value);
+                setPage(1);
+              }
+            }}
+          />
+        </div>
         <div className="row justify-content-center align-items-center gy-5 mx-auto">
           {movies.map((movie, index) => (
             <Card key={index} movie={movie} />

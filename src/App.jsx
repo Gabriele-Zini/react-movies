@@ -3,11 +3,8 @@ import axios from "axios";
 import Card from "./components/Card";
 import SeriesCard from "./components/SeriesCard";
 import "./App.css";
-/* import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faChevronLeft,
-  faChevronRight,
-} from "@fortawesome/free-solid-svg-icons"; */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -125,11 +122,24 @@ function App() {
     fetchData();
   }, [page]);
   
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth",
+    });
+  };
 
   return (
     <>
       <div className="my-5 ms_container">
-        <h3 className="text-center text-white mt-5 mb-4">Movies</h3>
+        <h3 className="text-center text-white mb-4 ms_margin-top">Movies</h3>
         <Slider {...settings}>
           {movies.map((movie, index) => (
             <div key={index}>
@@ -145,6 +155,18 @@ function App() {
             </div>
           ))}
         </Slider>
+        <FontAwesomeIcon
+          href="#"
+          icon={faChevronUp}
+          className="ms_chevron-up"
+          onClick={scrollToTop}
+        />
+        <FontAwesomeIcon
+          href="#"
+          icon={faChevronDown}
+          className="ms_chevron-down"
+          onClick={scrollToBottom}
+        />
       </div>
     </>
   );
