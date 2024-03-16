@@ -18,8 +18,12 @@ function App() {
   const [loading, setLoading] = useState(false);
   const settings = {
     slidesToShow: 6,
+    slidesToScroll: 3,
     infinite: false,
     arrows: true,
+    accessibility: true, 
+    focusOnSelect: true,
+    wheel: true,
     responsive: [
       {
         breakpoint: 1124,
