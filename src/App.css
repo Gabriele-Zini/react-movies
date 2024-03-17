@@ -80,6 +80,7 @@
   transition: color .8s, background-color .8s;
   height: 100%;
   width: 100%;
+  border-radius: 8px;
 }
 
 .ms_card:hover .ms_credits {
