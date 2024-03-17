@@ -8,8 +8,13 @@ function Card({ serie }) {
         <div
           className=" ms_card mx-auto"
           style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/w342${serie.poster_path})`,
-            backgroundSize: "contain",
+            backgroundImage: `url(${
+              serie.poster_path
+                ? `https://image.tmdb.org/t/p/w342/${serie.poster_path}`
+                : "/src/assets/no-image-available.svg"
+            })`,
+            backgroundSize: `${serie.poster_path ? "contain" : "cover"}`,
+            backgroundPosition: `${!serie.poster_path ? "center" : ""}`,
             backgroundRepeat: "no-repeat",
             maxWidth: "200px",
           }}
