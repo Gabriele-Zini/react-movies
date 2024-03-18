@@ -24,7 +24,7 @@ function Card({ serie }) {
               <strong>Title: </strong>
               {serie.name}
             </p>
-            <div>
+           { serie.credits.length>0 && <div>
               <strong>Cast:</strong>
               {serie.credits.map((credit, index) => {
                 if (index < 5 && index < serie.credits.length - 1) {
@@ -43,7 +43,7 @@ function Card({ serie }) {
                   return null;
                 }
               })}
-            </div>
+            </div>}
           </div>
         </div>
       </div>

@@ -4,9 +4,9 @@ import "../App.css";
 function Card({ movie }) {
   return (
     <>
-      <div className="col-12 col-sm-5 col-md-3 col-lg-2 ms-3 mx-auto">
+      <div className="col-12 col-sm-5 col-md-3 col-xl-2 ms-3 mx-auto">
         <div
-          className=" ms_card mx-auto"
+          className="ms_card mx-auto"
           style={{
             backgroundImage: `url(${
               movie.poster_path
@@ -24,26 +24,31 @@ function Card({ movie }) {
               <strong>Title: </strong>
               {movie.title}
             </p>
-            <div>
-              <strong>Cast:</strong>
-              {movie.credits.map((credit, index) => {
-                if (index < 5) {
-                  return (
-                    <span className="mx-1" key={index}>
-                      {credit.name},
-                    </span>
-                  );
-                } else if (index === 5) {
-                  return (
-                    <span className="mx-1" key={index}>
-                      {credit.name}.
-                    </span>
-                  );
-                } else {
-                  return null;
-                }
-              })}
-            </div>
+            {movie.credits.length > 0 && (
+              <div>
+                <strong>Cast:</strong>
+                {movie.credits.map((credit, index) => {
+                  if (index < 5 && index < movie.credits.length - 1) {
+                    return (
+                      <span className="mx-1" key={index}>
+                        {credit.name},
+                      </span>
+                    );
+                  } else if (
+                    index === 5 ||
+                    index === movie.credits.length - 1
+                  ) {
+                    return (
+                      <span className="mx-1" key={index}>
+                        {credit.name}.
+                      </span>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+              </div>
+            )}
           </div>
         </div>
       </div>
