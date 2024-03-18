@@ -10,7 +10,7 @@ function Movies() {
   const [loading, setLoading] = useState(false);
   const endOfListRef = useRef();
   const [inputValue, setInputValue] = useState("");
-  const [loadingMore, setLoadingMore] = useState(true);
+  const [loadingMore, stopLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,7 +56,7 @@ function Movies() {
       }
 
       setLoading(false);
-      setLoadingMore(false);
+      stopLoading(false);
       /*  console.log(inputValue);*/
       console.log(moviesWithCredits);
       console.log("Loading more:", loadingMore);
@@ -69,7 +69,7 @@ function Movies() {
     const target = entries[0];
 
     if (target.isIntersecting && !loading && !loadingMore) {
-      setLoadingMore(false);
+      stopLoading(false);
       setPage((prevPage) => prevPage + 1);
     }
   };
