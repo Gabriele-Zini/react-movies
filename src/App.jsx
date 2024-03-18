@@ -142,7 +142,7 @@ function App() {
         <h3 className="text-center text-white mb-4 ms_margin-top">Movies</h3>
         <Slider {...settings}>
           {movies.map((movie, index) => (
-            <div key={index}>
+            <div className="ms_padding-start ps-xl-3 " key={index}>
               <Card movie={movie} />
             </div>
           ))}
@@ -150,7 +150,7 @@ function App() {
         <h3 className="text-center text-white mt-5 mb-4">Series</h3>
         <Slider {...settings}>
           {series.map((serie, index) => (
-            <div key={index}>
+            <div className="ms_padding-start ps-xl-3" key={index}>
               <SeriesCard serie={serie} />
             </div>
           ))}

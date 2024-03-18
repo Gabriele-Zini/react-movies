@@ -6,6 +6,12 @@
   font-size: .8rem;
 }
 
+.ms_container {
+  width: 90%;
+  max-width: 1450px;
+  margin: 0 auto;
+}
+
 @media (max-width: 500px) {
   .ms_card {
     height: 300px !important;
@@ -13,6 +19,24 @@
   }
   .ms_container {
     width: 80%;
+  }
+}
+
+@media (min-width: 1024) {
+  .ms_padding-start {
+    padding-left: 30px !important;
+  }
+}
+
+@media (min-width: 790px) {
+  .ms_padding-start {
+    padding-left: 50px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .ms_padding-start {
+    padding-left: 80px;
   }
 }
 
@@ -95,12 +119,6 @@
   object-position: top;
 }
 
-.ms_container {
-  width: 90%;
-  max-width: 1450px;
-  margin: 0 auto;
-
-}
 
 /* HEADER */
 header {

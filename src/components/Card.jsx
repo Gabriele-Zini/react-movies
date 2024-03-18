@@ -4,7 +4,7 @@ import "../App.css";
 function Card({ movie }) {
   return (
     <>
-      <div className="col-12 col-sm-5 col-md-3 col-xl-2 ms-3 mx-auto">
+      <div className="col-12 col-md-4 col-xl-2">
         <div
           className="ms_card mx-auto"
           style={{

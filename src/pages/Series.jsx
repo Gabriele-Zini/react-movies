@@ -100,7 +100,7 @@ function Series() {
 
   return (
     <>
-      <div className="container my-5">
+      <div className="ms_container  my-5">
         <div className="ms_margin-top mb-4 d-flex justify-content-between align-items-center gap-3 mx-auto col-12 col-md-6 col-lg-4 flex-column flex-md-row">
           <h3 className="text-center text-white">
             Series
@@ -119,7 +119,7 @@ function Series() {
             }}
           />
         </div>
-        <div className="row justify-content-center align-items-center gy-5 mx-auto">
+        <div className="row justify-content-center align-items-center gy-4 mx-auto">
           {series.map((serie, index) => (
             <SeriesCard key={index} serie={serie} />
           ))}
