@@ -70,7 +70,7 @@ function Movies() {
 
     if (target.isIntersecting && !loading && !loadingMore) {
       stopLoading(false);
-      setPage((prevPage) => prevPage + 1);
+      setPage((nextPage) => nextPage + 1);
     }
   };
 
