@@ -13,7 +13,7 @@ function Card({ serie }) {
                 ? `https://image.tmdb.org/t/p/w342/${serie.poster_path}`
                 : "/src/assets/no-image-available.svg"
             })`,
-            backgroundSize: `${serie.poster_path ? "contain" : "cover"}`,
+            backgroundSize: "cover",
             backgroundPosition: `${!serie.poster_path ? "center" : ""}`,
             backgroundRepeat: "no-repeat",
             maxWidth: "200px",
