@@ -9,15 +9,24 @@ function Series() {
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const endOfListRef = useRef();
+  const [inputValue, setInputValue] = useState("");
+  const [loadingMore, setLoadingMore] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      let apiUrl;
+      if (inputValue !== "") {
+        apiUrl = "https://api.themoviedb.org/3/search/tv?";
+      } else {
+        apiUrl = "https://api.themoviedb.org/3/discover/tv";
+      }
       const params = {
         api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
         page: page,
+        query: inputValue,
       };
-      const res = await axios.get(`https://api.themoviedb.org/3/discover/tv?`, {
+      const res = await axios.get(apiUrl, {
         params,
       });
 
@@ -40,12 +49,17 @@ function Series() {
         })
       );
 
-      setSeries((prevSeries) => [...prevSeries, ...seriesWithCredits]);
+      if (page === 1) {
+        setSeries(seriesWithCredits);
+      } else {
+        setSeries((prevSeries) => [...prevSeries, ...seriesWithCredits]);
+      }
+
       setLoading(false);
     };
 
     fetchData();
-  }, [page]);
+  }, [page, inputValue]);
 
   const handleIntersection = (entries) => {
     const target = entries[0];
@@ -58,7 +72,8 @@ function Series() {
     const observer = new IntersectionObserver(handleIntersection, {
       threshold: 0.5,
     });
-    if (endOfListRef.current) {
+    if (endOfListRef.current && !loadingMore) {
+      setLoadingMore(false);
       observer.observe(endOfListRef.current);
     }
 
@@ -86,7 +101,24 @@ function Series() {
   return (
     <>
       <div className="container my-5">
-        <h3 className="text-center text-white mb-4 ms_margin-top">TV Series</h3>
+        <div className="ms_margin-top mb-4 d-flex justify-content-between align-items-center gap-3 mx-auto col-12 col-md-6 col-lg-4 flex-column flex-md-row">
+          <h3 className="text-center text-white">
+            Series
+          </h3>
+          <input
+            className="form-control w-75"
+            type="text"
+            placeholder="search movies"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                setInputValue(e.target.value);
+                setPage(1);
+              }
+            }}
+          />
+        </div>
         <div className="row justify-content-center align-items-center gy-5 mx-auto">
           {series.map((serie, index) => (
             <SeriesCard key={index} serie={serie} />
