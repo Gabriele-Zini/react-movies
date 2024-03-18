@@ -56,6 +56,7 @@ function Series() {
       }
 
       setLoading(false);
+      setLoadingMore(false);
     };
 
     fetchData();
@@ -63,17 +64,20 @@ function Series() {
 
   const handleIntersection = (entries) => {
     const target = entries[0];
-    if (target.isIntersecting && !loading) {
+
+    if (target.isIntersecting && !loading && !loadingMore) {
+      setLoadingMore(false);
       setPage((prevPage) => prevPage + 1);
     }
   };
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 0.5,
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.1,
     });
     if (endOfListRef.current && !loadingMore) {
-      setLoadingMore(false);
       observer.observe(endOfListRef.current);
     }
 
@@ -82,7 +86,7 @@ function Series() {
         observer.unobserve(endOfListRef.current);
       }
     };
-  }, [endOfListRef, loading]);
+  }, [endOfListRef, loadingMore]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -100,7 +104,7 @@ function Series() {
 
   return (
     <>
-      <div className="ms_container  my-5">
+      <div className="ms_container my-5">
         <div className="ms_margin-top mb-4 d-flex justify-content-between align-items-center gap-3 mx-auto col-12 col-md-6 col-lg-4 flex-column flex-md-row">
           <h3 className="text-center text-white">
             Series
@@ -108,7 +112,7 @@ function Series() {
           <input
             className="form-control w-75"
             type="text"
-            placeholder="search movies"
+            placeholder="search series"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyUp={(e) => {

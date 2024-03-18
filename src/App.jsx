@@ -11,7 +11,9 @@ import "slick-carousel/slick/slick-theme.css";
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [bestMovies, setBestMovies] = useState([]);
   const [series, setSeries] = useState([]);
+  const [bestSeries, setBestSeries] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -20,7 +22,7 @@ function App() {
     slidesToScroll: 3,
     infinite: false,
     arrows: true,
-    accessibility: true, 
+    accessibility: true,
     focusOnSelect: true,
     wheel: true,
     responsive: [
@@ -65,16 +67,46 @@ function App() {
           `https://api.themoviedb.org/3/discover/movie?&sort_by=vote_average.desc&vote_count.gte=200`,
           { params }
         );
+        const respMovies = await axios.get(
+          `https://api.themoviedb.org/3/discover/movie?`,
+          { params }
+        );
 
-        const resp= await axios.get(`https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=vote_average.desc&vote_count.gte=200`, {params})
+        const resp = await axios.get(
+          `https://api.themoviedb.org/3/discover/tv?language=en-US&sort_by=vote_average.desc&vote_count.gte=200`,
+          { params }
+        );
+        const respSeries = await axios.get(
+          `https://api.themoviedb.org/3/discover/tv?`,
+          { params }
+        );
 
-        const moviesData = res.data.results;
-        const seriesData =resp.data.results;
-       
+        const moviesData = respMovies.data.results;
+        const seriesData = respSeries.data.results;
+        const bestMoviesData = res.data.results;
+        const bestSeriesData = resp.data.results;
 
-        // MOVIES CREDITS
+        //  MOVIES CREDITS
         const moviesWithCredits = await Promise.all(
           moviesData.map(async (movie) => {
+            const creditsParams = {
+              api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
+            };
+            const creditsRes = await axios.get(
+              `https://api.themoviedb.org/3/movie/${movie.id}/credits`,
+              { params: creditsParams }
+            );
+            const credits = creditsRes.data.cast;
+
+            return {
+              ...movie,
+              credits: credits,
+            };
+          })
+        );
+        // BEST MOVIES CREDITS
+        const bestMoviesWithCredits = await Promise.all(
+          bestMoviesData.map(async (movie) => {
             const creditsParams = {
               api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
             };
@@ -109,9 +141,31 @@ function App() {
             };
           })
         );
-        setSeries(seriesWithCredits)
+
+        // BEST SERIES CREDITS
+        const bestSeriesWithCredits = await Promise.all(
+          bestSeriesData.map(async (serie) => {
+            const creditsParams = {
+              api_key: "7c99d77d8acb8db9c5ee5504f2096b13",
+            };
+            const creditsRes = await axios.get(
+              `https://api.themoviedb.org/3/tv/${serie.id}/credits`,
+              { params: creditsParams }
+            );
+            const credits = creditsRes.data.cast;
+
+            return {
+              ...serie,
+              credits: credits,
+            };
+          })
+        );
+
         setMovies(moviesWithCredits);
-        console.log(seriesWithCredits)
+        setSeries(seriesWithCredits);
+        setBestMovies(bestMoviesWithCredits);
+        setBestSeries(bestSeriesWithCredits);
+        console.log(bestSeriesWithCredits);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {
@@ -121,7 +175,7 @@ function App() {
 
     fetchData();
   }, [page]);
-  
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -139,7 +193,7 @@ function App() {
   return (
     <>
       <div className="my-5 ms_container">
-        <h3 className="text-center text-white mb-4 ms_margin-top">Movies</h3>
+        <h3 className="text-center text-white mb-4 ms_margin-top">Latest Movies</h3>
         <Slider {...settings}>
           {movies.map((movie, index) => (
             <div className="ms_padding-start ps-xl-3 " key={index}>
@@ -147,9 +201,25 @@ function App() {
             </div>
           ))}
         </Slider>
-        <h3 className="text-center text-white mt-5 mb-4">Series</h3>
+        <h3 className="text-center text-white mb-4 ms_margin-top">Top-Rated Movies</h3>
+        <Slider {...settings}>
+          {bestMovies.map((movie, index) => (
+            <div className="ms_padding-start ps-xl-3 " key={index}>
+              <Card movie={movie} />
+            </div>
+          ))}
+        </Slider>
+        <h3 className="text-center text-white mt-5 mb-4">Latest Series</h3>
         <Slider {...settings}>
           {series.map((serie, index) => (
+            <div className="ms_padding-start ps-xl-3" key={index}>
+              <SeriesCard serie={serie} />
+            </div>
+          ))}
+        </Slider>
+        <h3 className="text-center text-white mt-5 mb-4">Top-Rated Series</h3>
+        <Slider {...settings}>
+          {bestSeries.map((serie, index) => (
             <div className="ms_padding-start ps-xl-3" key={index}>
               <SeriesCard serie={serie} />
             </div>
